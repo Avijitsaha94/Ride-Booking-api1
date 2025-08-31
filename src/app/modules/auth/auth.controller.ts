@@ -6,10 +6,10 @@ import { JwtPayload } from "jsonwebtoken"
 import passport from "passport"
 import { envVars } from "../../config/env"
 import AppError from "../../errorHelpers/AppError"
-import { catchAsync } from "../../utils/catchAsync"
-import { sendResponse } from "../../utils/sendResponse"
-import { setAuthCookie } from "../../utils/setCookie"
-import { createUserTokens } from "../../utils/userTokens"
+import { catchAsync } from "../../../utils/catchAsync"
+import { sendResponse } from "../../../utils/sendResponse"
+import { setAuthCookie } from "../../../utils/setCookie"
+import { createUserTokens } from "../../../utils/userToken"
 import { AuthServices } from "./auth.service"
 
 const credentialsLogin = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -19,31 +19,17 @@ const credentialsLogin = catchAsync(async (req: Request, res: Response, next: Ne
 
         if (err) {
 
-            // ❌❌❌❌❌
-            // throw new AppError(401, "Some error")
-            // next(err)
-            // return new AppError(401, err)
-
-
-            // ✅✅✅✅
-            // return next(err)
-            // console.log("from err");
             return next(new AppError(401, err))
         }
 
         if (!user) {
-            // console.log("from !user");
-            // return new AppError(401, info.message)
+         
             return next(new AppError(401, info.message))
         }
 
         const userTokens = await createUserTokens(user)
 
-        // delete user.toObject().password
-
         const { password: pass, ...rest } = user.toObject()
-
-
         setAuthCookie(res, userTokens)
 
         sendResponse(res, {
@@ -59,17 +45,8 @@ const credentialsLogin = catchAsync(async (req: Request, res: Response, next: Ne
         })
     })(req, res, next)
 
-    // res.cookie("accessToken", loginInfo.accessToken, {
-    //     httpOnly: true,
-    //     secure: false
-    // })
-
-
-    // res.cookie("refreshToken", loginInfo.refreshToken, {
-    //     httpOnly: true,
-    //     secure: false,
-    // })
-
+    
+  
 
 })
 const getNewAccessToken = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -79,10 +56,6 @@ const getNewAccessToken = catchAsync(async (req: Request, res: Response, next: N
     }
     const tokenInfo = await AuthServices.getNewAccessToken(refreshToken as string)
 
-    // res.cookie("accessToken", tokenInfo.accessToken, {
-    //     httpOnly: true,
-    //     secure: false
-    // })
 
     setAuthCookie(res, tokenInfo);
 
@@ -136,7 +109,6 @@ const googleCallbackController = catchAsync(async (req: Request, res: Response, 
         redirectTo = redirectTo.slice(1)
     }
 
-    // /booking => booking , => "/" => ""
     const user = req.user;
 
     if (!user) {
@@ -147,12 +119,6 @@ const googleCallbackController = catchAsync(async (req: Request, res: Response, 
 
     setAuthCookie(res, tokenInfo)
 
-    // sendResponse(res, {
-    //     success: true,
-    //     statusCode: httpStatus.OK,
-    //     message: "Password Changed Successfully",
-    //     data: null,
-    // })
 
     res.redirect(`${envVars.FRONTEND_URL}/${redirectTo}`)
 })
