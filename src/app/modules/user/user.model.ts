@@ -4,6 +4,7 @@ import { IUser, Role, IsActive } from "./user.interface";
 
 const UserSchema = new Schema<IUser>(
     {
+        _id: { type: String },
         name: { type: String },
         email: { type: String, required: true, unique: true },
         password: { type: String },

@@ -1,13 +1,17 @@
+import { Types } from "mongoose";
+
 export enum DriverStatus {
-    ONLINE = "ONLINE",
-    OFFLINE = "OFFLINE"
+    ACTIVE = "ACTIVE",
+    INACTIVE = "INACTIVE",
+    BLOCKED = "BLOCKED",
+    OFFLINE = "OFFLINE" 
 }
 
 export interface IDriver {
-    userId: string; // reference to User
+    userId: Types.ObjectId; 
+    licenseNumber: string;
     vehicleNumber: string;
-    vehicleType: string;
-    status: DriverStatus;
-    earnings?: number;
-    isVerified?: boolean;
+    status: DriverStatus; 
+    earnings?: number; 
+    isVerified?: boolean; 
 }

@@ -1,13 +1,39 @@
-import mongoose, { Schema } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import { IRide, RideStatus } from "./ride.interface";
 
-const rideSchema = new Schema<IRide>({
-    riderId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    driverId: { type: mongoose.Schema.Types.ObjectId, ref: "Driver" },
-    pickupLocation: { type: String, required: true },
-    dropLocation: { type: String, required: true },
-    fare: { type: Number },
-    status: { type: String, enum: Object.values(RideStatus), default: RideStatus.PENDING }
-}, { timestamps: true });
+export interface IRideDocument extends IRide, Document {}
 
-export const Ride = mongoose.model<IRide>("Ride", rideSchema);
+const rideSchema = new Schema<IRideDocument>(
+  {
+    riderId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    driverId: { type: Schema.Types.ObjectId, ref: "Driver" },
+    pickupLocation: {
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true },
+      address: { type: String },
+    },
+    destinationLocation: {
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true },
+      address: { type: String },
+    },
+    status: {
+      type: String,
+      enum: [
+        "REQUESTED",
+        "ACCEPTED",
+        "PICKED_UP",
+        "IN_TRANSIT",
+        "COMPLETED",
+        "CANCELLED",
+      ],
+      default: "REQUESTED",
+    },
+    fare: { type: Number },
+    requestedAt: { type: Date, default: Date.now },
+    completedAt: { type: Date },
+  },
+  { timestamps: true }
+);
+
+export const Ride = model<IRideDocument>("Ride", rideSchema);

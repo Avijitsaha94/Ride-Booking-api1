@@ -4,7 +4,7 @@ import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
 import { envVars } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
-import { createNewAccessTokenWithRefreshToken } from "../../../utils/userToken";
+import { createNewAccessTokenWithRefreshToken } from "../../utils/userToken";
 import { User } from "../user/user.model";
 
 

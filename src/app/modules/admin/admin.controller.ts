@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status-codes";
-import { catchAsync } from "../../../utils/catchAsync";
-import { sendResponse } from "../../../utils/sendResponse";
-import AppError from "../../errorHelpers/AppError";
-import { User } from "../user/user.model";
-import { Driver } from "../driver/driver.model";
-import { Ride } from "../ride/ride.model";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
+
+
 import { AdminServices } from "./admin.service";
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {

@@ -2,7 +2,7 @@ import httpStatus from "http-status-codes";
 import AppError from "../../errorHelpers/AppError";
 import { Driver } from "./driver.model";
 import { IDriver } from "./driver.interface";
-import { JwtPayload } from "jsonwebtoken";
+
 
 const createDriver = async (payload: Partial<IDriver>) => {
     const existingDriver = await Driver.findOne({ userId: payload.userId });

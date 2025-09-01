@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
-import { catchAsync } from "../../../utils/catchAsync";
-import { sendResponse } from "../../../utils/sendResponse";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
 import { UserServices } from "./user.service";
 
 // Create User

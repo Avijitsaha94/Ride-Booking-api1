@@ -1,10 +1,10 @@
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
-import { envVars } from "../app/config/env";
-import AppError from "../app/errorHelpers/AppError";
-import { IsActive, IUser } from "../app/modules/user/user.interface";
-import { User } from "../app/modules/user/user.model";
-import { generateToken, verifyToken } from "./jwt";
+import { envVars } from "../config/env";
+import AppError from "../errorHelpers/AppError";
+import { IsActive, IUser } from "../modules/user/user.interface";
+import { User } from "../modules/user/user.model";
+import { generateToken, verifyToken } from "../utils/jwt";
 
 export const createUserTokens = (user: Partial<IUser>) => {
     const jwtPayload = {
