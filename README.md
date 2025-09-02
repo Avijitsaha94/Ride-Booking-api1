@@ -1,98 +1,158 @@
-#  Ride Booking API
+# 🚖 Ride Booking API
 
-A ride-hailing (Uber/Pathao style) backend API built with **Node.js**, **Express.js**, and **MongoDB (Mongoose)**.  
-This project supports user authentication, driver management, ride booking, and role-based access control.
+A **ride-hailing backend API** (similar to Uber/Pathao) built with **Node.js, Express, MongoDB, and TypeScript**.  
+It provides user authentication, driver management, ride booking, and role-based access control.
 
 ---
 
-##  Features
+## 📌 Project Overview
 
--  **Authentication & Authorization**
-  - Register/Login with email & password
-  - JWT-based authentication
-  - Role-based access control (USER, DRIVER, ADMIN, SUPER_ADMIN)
+The **Ride Booking API** allows users to request rides, drivers to accept them, and admins to manage the overall system.  
+It is designed with scalability, modularity, and security in mind:
 
--  **User Management**
-  - Register new users
-  - Update profile
-  - Activate/Deactivate users
-  - Admin can view all users
+- **Users** can register, login, and book rides.
+- **Drivers** can register, update their status, and accept rides.
+- **Admins** can manage users, drivers, and rides.
+- **JWT authentication** secures protected routes.
+- **Zod validation** ensures clean request data.
+- **Role-based access control** prevents unauthorized access.
 
--  **Driver Management**
-  - Register drivers
-  - Update driver details
-  - Approve/Block drivers
-  - Admin can manage all drivers
+---
 
--  **Ride Management**
-  - Request ride
-  - Accept ride (Driver)
-  - Ride status tracking (REQUESTED → ACCEPTED → PICKED_UP → IN_TRANSIT → COMPLETED/CANCELLED)
+## ⚙️ Setup & Environment Instructions
 
--  **Validation & Security**
-  - Request validation using **Zod**
-  - Password hashing with **bcrypt**
-  - Protected routes using middleware
-  - Error handling with proper responses
-
-##  Tech Stack
-
-- **Backend Framework:** [Express.js](https://expressjs.com/)  
-- **Database:** [MongoDB](https://www.mongodb.com/) + [Mongoose](https://mongoosejs.com/)  
-- **Validation:** [Zod](https://zod.dev/)  
-- **Authentication:** [JWT](https://jwt.io/) + [Passport.js](https://www.passportjs.org/)  
-- **Language:** TypeScript  
-
-. Clone the repository
-
-git clone https://github.com/your-username/Ride-Booking-api.git
-cd Ride-Booking-api
-2. Install dependencies
+### 1️⃣ Clone the repository
+git clone https://github.com/your-username/ride-booking-api.git
+cd ride-booking-api
+2️⃣ Install dependencies
 
 npm install
+3️⃣ Create .env file in root directory
+env
 
-3. Run the project
+PORT=5000
+DATABASE_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/ridebooking
+JWT_ACCESS_SECRET=your_access_secret
+JWT_REFRESH_SECRET=your_refresh_secret
+JWT_ACCESS_EXPIRES=1d
+JWT_REFRESH_EXPIRES=7d
+BCRYPT_SALT=10
+4️⃣ Run the development server
 
 npm run dev
-API Endpoints
-Auth
-POST /api/auth/register → Register new user
+Server will start at:
+👉 http://localhost:5000
 
-POST /api/auth/login → Login and get JWT
+📡 API Endpoints Summary
+🔑 Authentication
+Method	Endpoint	Description	Auth Required
+POST	/api/auth/register	Register new user	❌
+POST	/api/auth/login	Login & get JWT tokens	❌
+POST	/api/auth/refresh	Refresh access token	❌
 
-Users
-GET /api/users/all-users → Get all users (Admin only)
+Example Request (Register User)
 
-PATCH /api/users/:id → Update user profile
 
-Drivers
-POST /api/drivers/register → Register new driver
+POST /api/auth/register
+{
+  "name": "Avijit Saha",
+  "email": "avijit@example.com",
+  "password": "secret123",
+  "role": "USER"
+}
+Example Response
 
-PATCH /api/drivers/:id → Update driver
 
-GET /api/drivers → Get all drivers (Admin only)
+{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "id": "64f1e1c6c0a123",
+    "email": "avijit@example.com",
+    "role": "USER"
+  }
+}
+👤 Users
+Method	Endpoint	Description	Auth Required
+GET	/api/users/all-users	Get all users (Admin only)	✅ (Admin)
+PATCH	/api/users/:id	Update user profile	✅ (User/Admin)
 
-Rides
-POST /api/rides/request → Request a new ride
+Example Request (Update User)
 
-PATCH /api/rides/:id/accept → Accept ride (Driver)
 
-PATCH /api/rides/:id/status → Update ride status
+PATCH /api/users/64f1e1c6c0a123
+Authorization: Bearer <token>
+{
+  "name": "Avijit Updated",
+  "phone": "017XXXXXXXX"
+}
+Example Response
 
-GET /api/rides → Get all rides (Admin/Driver)
 
-Testing with Postman:
-You can test all endpoints using Postman:
+{
+  "success": true,
+  "message": "User updated successfully",
+  "data": {
+    "id": "64f1e1c6c0a123",
+    "name": "Avijit Updated",
+    "phone": "017XXXXXXXX"
+  }
+}
+🚗 Drivers
+Method	Endpoint	Description	Auth Required
+POST	/api/drivers/register	Register new driver	❌
+GET	/api/drivers	Get all drivers (Admin)	✅ (Admin)
+PATCH	/api/drivers/:id	Update driver details	✅ (Driver/Admin)
 
-Import endpoints manually
+Example Request (Register Driver)
 
-First register/login to get JWT token
 
-Use JWT in Authorization: Bearer <token> for protected routes
+POST /api/drivers/register
+{
+  "name": "Rahim Driver",
+  "email": "rahim@example.com",
+  "password": "driver123",
+  "licenseNumber": "DL-12345"
+}
+🛺 Rides
+Method	Endpoint	Description	Auth Required
+POST	/api/rides/request	Request a new ride (User)	✅ (User)
+PATCH	/api/rides/:id/accept	Accept ride (Driver)	✅ (Driver)
+PATCH	/api/rides/:id/status	Update ride status	✅ (Driver/Admin)
+GET	/api/rides	Get all rides (Admin/Driver)	✅
 
- Deployment:
-Vercel 
+Example Request (Request Ride)
 
- Author
-Developed by Avijit saha
 
+POST /api/rides/request
+Authorization: Bearer <user_token>
+{
+  "pickupLocation": "Banani, Dhaka",
+  "dropoffLocation": "Dhanmondi, Dhaka"
+}
+Example Response
+
+
+{
+  "success": true,
+  "message": "Ride requested successfully",
+  "data": {
+    "id": "64f1f8a7c0d456",
+    "status": "REQUESTED",
+    "pickupLocation": "Banani, Dhaka",
+    "dropoffLocation": "Dhanmondi, Dhaka"
+  }
+}
+✅ Testing with Postman
+Register or login to get JWT token.
+
+Copy token and set in Authorization: Bearer <token>.
+
+Test protected routes with proper roles.
+
+🚀 Deployment
+You can deploy this project on Vercel, Render, Railway, or Heroku.
+Don’t forget to set environment variables in hosting platform.
+
+👨‍💻 Author
+Developed by Avijit Saha.
