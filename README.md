@@ -44,7 +44,10 @@ Server will start at:
 👉 http://localhost:5000
 
 📡 API Endpoints Summary
+
 🔑 Authentication
+
+
 Method	Endpoint	Description	Auth Required
 POST	/api/auth/register	Register new user	❌
 POST	/api/auth/login	Login & get JWT tokens	❌
@@ -54,12 +57,16 @@ Example Request (Register User)
 
 
 POST /api/auth/register
+
+
 {
   "name": "Avijit Saha",
   "email": "avijit@example.com",
   "password": "secret123",
   "role": "USER"
 }
+
+
 Example Response
 
 
@@ -73,6 +80,7 @@ Example Response
   }
 }
 👤 Users
+
 Method	Endpoint	Description	Auth Required
 GET	/api/users/all-users	Get all users (Admin only)	✅ (Admin)
 PATCH	/api/users/:id	Update user profile	✅ (User/Admin)
@@ -82,6 +90,7 @@ Example Request (Update User)
 
 PATCH /api/users/64f1e1c6c0a123
 Authorization: Bearer <token>
+
 {
   "name": "Avijit Updated",
   "phone": "017XXXXXXXX"
@@ -99,6 +108,7 @@ Example Response
   }
 }
 🚗 Drivers
+
 Method	Endpoint	Description	Auth Required
 POST	/api/drivers/register	Register new driver	❌
 GET	/api/drivers	Get all drivers (Admin)	✅ (Admin)
@@ -108,28 +118,44 @@ Example Request (Register Driver)
 
 
 POST /api/drivers/register
+
 {
   "name": "Rahim Driver",
   "email": "rahim@example.com",
   "password": "driver123",
   "licenseNumber": "DL-12345"
 }
+
 🛺 Rides
+
 Method	Endpoint	Description	Auth Required
-POST	/api/rides/request	Request a new ride (User)	✅ (User)
-PATCH	/api/rides/:id/accept	Accept ride (Driver)	✅ (Driver)
-PATCH	/api/rides/:id/status	Update ride status	✅ (Driver/Admin)
-GET	/api/rides	Get all rides (Admin/Driver)	✅
+
+POST	
+/api/rides/request	
+Request a new ride (User)	✅ (User)
+PATCH	
+/api/rides/:id/accept	
+Accept ride (Driver)	✅ (Driver)
+PATCH
+/api/rides/:id/status
+Update ride status	✅ (Driver/Admin)
+GET	
+/api/rides	
+Get all rides (Admin/Driver)	✅
+
 
 Example Request (Request Ride)
 
 
 POST /api/rides/request
+
 Authorization: Bearer <user_token>
+
 {
   "pickupLocation": "Banani, Dhaka",
   "dropoffLocation": "Dhanmondi, Dhaka"
 }
+
 Example Response
 
 
@@ -143,7 +169,9 @@ Example Response
     "dropoffLocation": "Dhanmondi, Dhaka"
   }
 }
+
 ✅ Testing with Postman
+
 Register or login to get JWT token.
 
 Copy token and set in Authorization: Bearer <token>.
@@ -151,8 +179,10 @@ Copy token and set in Authorization: Bearer <token>.
 Test protected routes with proper roles.
 
 🚀 Deployment
+
 You can deploy this project on Vercel, Render, Railway, or Heroku.
 Don’t forget to set environment variables in hosting platform.
 
 👨‍💻 Author
+
 Developed by Avijit Saha.
